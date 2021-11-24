@@ -42,6 +42,7 @@ def pipeline_detail_view(request, id):
     return render(request, "pipelines/pipeline_detail.html", context)
 
 def pipeline_execute_view(request, id):
+    print("In execution")
     context = {}
     obj = Pipeline.objects.get(id=id)
     context["object"] = obj

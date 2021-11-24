@@ -70,6 +70,9 @@ class CreatePipelineTasks(threading.Thread):
 @shared_task(bind=True)
 def execute_algorithm_and_update_progress(self):
     print("Inside")
+    for i in range(10):
+        print(i)
+    return "Done"
     '''algorithm_progress = AlgorithmProgress.objects.create(pipeline="Discovery Omics", algorithm_number=1)
     for i in range(20):
         sleep(2)

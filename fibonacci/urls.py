@@ -26,4 +26,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pipelines/', include('pipelines.urls')),
     path('celery-progress/', include('celery_progress.urls')),
+    #path('', include('mainapp.urls')),
 ]
