@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+<form method="POST" action="{% url 'other_view' %}" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input type="file" name="SampleDataFile" id="real-sample-data-file" style="display: none;" accept=".mzML, .RAW" required />
+	<button type="button" id="custom-sample-data-button">Add Mass Spec Run</button>
+	<br/>
+	<br/>
+	<select id="sample_data_list" name="sample_data_list" size="5" multiple>
+		<option> </option>
+	</select>
+	<table class="table table-bordered" id="sample_data_files">
+	</table>
+	<button class="btn btn-primary" type="submit">Go!!</button>
+</form>
+<script src="{% static 'js/pipeline-construction.js' %}" defer></script>
+{% endblock %}

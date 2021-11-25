@@ -43,8 +43,12 @@ def pipeline_detail_view(request, id):
 
 def pipeline_execute_view(request, id):
     print("In execution")
+    print(request)
+    print(request.FILES)
+    print("And the pipeline is...")
     context = {}
     obj = Pipeline.objects.get(id=id)
+    print(obj)
     context["object"] = obj
     inputs = {}
     execution_map = {}
