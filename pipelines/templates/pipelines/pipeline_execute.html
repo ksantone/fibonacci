@@ -49,22 +49,6 @@
 	</div>
 	<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
 	<script>
-		function customProgressSpectralExtraction(progressBarElement, progressBarMessageElement, progress) {
-			progressBarElement = document.getElementById("progress-bar-Spectral");
-			progressBarMessageElement = document.getElementById("progress-message-Spectral");
-			barIdentifier = progressBarElement.id.substring(12);
-			taskNumber = parseInt(progress.current);
-            taskPercentage = taskNumber / progress.total * 100;
-            console.log("Spectral "+taskPercentage);
-            progressBarElement.style.backgroundColor = "#68a9ef";
-            progressBarElement.style.width = (2.2*taskPercentage)+"px";
-            progressBarMessageElement.style.width = 220+"px";
-            if (taskPercentage==100) {
-            	progressBarMessageElement.innerHTML = "Completed"
-        	} else {
-        		progressBarMessageElement.innerHTML = taskPercentage + "%\n" + "Waiting...";
-        	}
-		}
 		function customProgressDeNovo(progressBarElement, progressBarMessageElement, progress) {
 			console.log("In DeNovo update function.");
 			progressBarElement = document.getElementById("progress-bar-DeNovo");
@@ -77,7 +61,7 @@
             progressBarElement.style.width = (2.2*taskPercentage)+"px";
             progressBarMessageElement.style.width = 220+"px";
             if (taskPercentage==100) {
-            	progressBarMessageElement.innerHTML = "Completed"
+            	progressBarMessageElement.innerHTML = "Completed";
         	} else {
         		progressBarMessageElement.innerHTML = taskPercentage + "%\n" + "Waiting...";
         	}
@@ -98,16 +82,7 @@
         		progressBarMessageElement.innerHTML = taskPercentage + "%\n" + "Waiting...";
         	}
 		}
-		// vanilla JS version
-	  	document.addEventListener("DOMContentLoaded", function () {
-	  		var progressUrl_Spectral = "{% url 'celery_progress:task_status' task_id_Spectral %}";
-	  		console.log(progressUrl_Spectral);
-	  		CeleryProgressBar.initProgressBar(progressUrl_Spectral, {
-	  			onProgress: customProgressSpectralExtraction,
-	  			progressBarId: "progress-bar-Spectral"
-	  		});
-	  	});
-	  	document.addEventListener("DOMContentLoaded", function () {
+		document.addEventListener("DOMContentLoaded", function () {
 	  		var progressUrl_DeNovo = "{% url 'celery_progress:task_status' task_id_DeNovo %}";
 	  		console.log(progressUrl_DeNovo);
 	  		CeleryProgressBar.initProgressBar(progressUrl_DeNovo, {
@@ -115,7 +90,7 @@
 	  			progressBarId: "progress-bar-DeNovo"
 	  		});
 	  	});
-		document.addEventListener("DOMContentLoaded", function () {
+	  	document.addEventListener("DOMContentLoaded", function () {
 	  		var progressUrl_Database = "{% url 'celery_progress:task_status' task_id_Database %}";
 	  		console.log(progressUrl_Database);
 	  		CeleryProgressBar.initProgressBar(progressUrl_Database, {
@@ -129,7 +104,7 @@
 	<script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 	{% block custom_javascript %}
 	<script>
-		let node, progress_wrappers, pipeline_length, svg, pipeline_container;
+		/*let node, progress_wrappers, pipeline_length, svg, pipeline_container;
 		const url = 'ws://'+window.location.host+'/ws/chat/';
 		let spectral_algo = document.getElementById("progress-bar-Spectral");
 		let denovo_algo = document.getElementById("progress-bar-DeNovo");
@@ -149,7 +124,7 @@
 		}
 		ws.onerror = function(event) {
 			console.log("Something went wrong.");
-		}
+		}*/
 	</script>
 	{% endblock custom_javascript %}
 	<script>
@@ -200,6 +175,7 @@
 			//window.addEventListener('resize', render);
 			console.log("In the function.");
 			let algorithms_safe = {{ algorithms|safe }};
+			console.log(algorithms_safe);
 			if (initialize_map) {
 				set_algorithm_map();
 			} else {
@@ -260,7 +236,6 @@
 								.attr("style", "text-align: center; color: #6f36ff; font-size: 23px; font-weight: 500; padding: 17px 30px; border-bottom: 1px solid #bfbfbf; border-color: black;")
 								.text(function(d) { return d.name; });
 
-
 			special_content = special_box.selectAll("div.wrapper-box")
 						.data(function(d) { return [d]; })
 						.enter()
@@ -290,7 +265,6 @@
 							}
 						})
 						.attr("style", "margin-left: 10px; background-color: rgb(104, 169, 239); height: 40px; width: 0px; top: 240px; left:345.5px;");
-
 			progress_message = progress_wrapper.append("div")
 						.attr("id", function(d) {
 							if (d.name.startsWith("Spectral")) {

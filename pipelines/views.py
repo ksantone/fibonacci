@@ -71,15 +71,16 @@ def pipeline_execute_view(request, id):
         print(obj.algorithms)
         CreatePipelineTasks(obj.title, obj.algorithms, inputs, queue).start()
         print("Done creating pipeline tasks...")
+        print(queue)
         while True:
             flag = queue.empty()
             if flag:
                 pass
             else:
                 print("In else statement")
-                algorithm_to_executable = {"Spectral": "Spectral", "DeNovo": "DeNovoSequencingAlgorithm.exe", "Database": "DatabaseSearchAlgorithm.exe", "FDR": "FDR.exe"}
+                algorithm_to_executable = {"DeNovo": "DeNovoSequencingAlgorithm.exe", "Database": "DatabaseSearchAlgorithm.exe"}#, "FDR": "FDR.exe"}
                 algorithms_to_task_ids = queue.get()
-                print(algorithm_to_executable)
+                print(algorithms_to_task_ids)
                 print(context["algorithms"])
                 for algorithm in context["algorithms"]:
                     context['task_id_'+algorithm] = algorithms_to_task_ids[algorithm_to_executable[algorithm]]

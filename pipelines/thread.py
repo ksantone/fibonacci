@@ -8,14 +8,14 @@ from django.core.files import File
 from django.conf import settings
 from queue import Queue
 
-from .DeNovo import run_denovo
+#from .DeNovo import run_denovo
 from celery import shared_task
 #from celery.task import Task
 from celery_progress.backend import ProgressRecorder
 
-from algorithm_progresses.models import AlgorithmProgress
+#from algorithm_progresses.models import AlgorithmProgress
 from time import sleep
-base_dir = settings.BASE_DIR
+#base_dir = settings.BASE_DIR
 
 class CreatePipelineTasks(threading.Thread):
     title = ""
@@ -46,24 +46,20 @@ class CreatePipelineTasks(threading.Thread):
             #print("Right before processor.")
             #print(mzml_contents)
             print("Right before...")
-            execute_algorithm_and_update_progress.delay()
+            #execute_algorithm_and_update_progress.delay()
             #processor = Processor.delay(mzml_contents)
-            print("Right after processor.")
-            '''print(self.algorithms)
-            print("Now, now...")
             processes = begin_pipeline_execution(self.title, self.algorithms, self.inputs)
             tasks = []
             print("After, after...")
             algorithms_to_task_ids = {}
-            algorithms_to_task_ids["Spectral"] = processor.task_id
+            #algorithms_to_task_ids["Spectral"] = processor.task_id
             print("Why?")
             print(processes)
-            #for process in processes:
-            task = run_pipeline.delay(processes[0])
-            get_log_info.delay()
-            algorithms_to_task_ids[processes[0][0].split("/")[-1]] = task.task_id
-            self.queue.put(algorithms_to_task_ids)
-            print("And how?")'''
+            for process in processes:
+                task = run_pipeline.delay(process[0])
+                algorithms_to_task_ids[process[0].split("\\")[-1]] = task.task_id
+                self.queue.put(algorithms_to_task_ids)
+            print("And how?")
         except Exception as e:
             print(e)
 
@@ -79,7 +75,7 @@ def execute_algorithm_and_update_progress(self):
         algorithm_progress.percent += 5
         print(algorithm_progress.percent)'''
 
-@shared_task(bind=True)
+'''@shared_task(bind=True)
 def get_log_info(self):
     logging_file = os.path.join(base_dir, "logging.txt")
     print(os.path.join(base_dir, "logging.txt"))
@@ -100,22 +96,14 @@ def get_log_info(self):
         print(num_lines)
         progress_recorder.set_progress(num_lines, 371, f'DeNovo sequencing')
     print("Out of while loop...")
-    print(num_lines)
+    print(num_lines)'''
 
 def begin_pipeline_execution(title, algorithms, inputs):
     processes = []
     spectral = True
     print(algorithms)
     for algorithm in algorithms.split(","):
-        print(algorithm)
-        if not spectral:
-            print("Hmm...")
-            add_algorithm_to_file(algorithm, processes)
-            print("Ohh...")
-        spectral = False
-        print("End of loop...")
-    print("Out of loop...")
-    print(processes)
+        add_algorithm_to_file(algorithm, processes)
     print("Done!")
     return processes
 
@@ -124,22 +112,29 @@ def add_algorithm_to_file(algorithm, processes):
     algorithm_to_executable = {"DeNovo": "DeNovoSequencingAlgorithm.exe", "Database": "DatabaseSearchAlgorithm.exe", "FDR": "FDR.exe"}
     print("Huh?")
     print(algorithm_to_executable)
-    algorithm_reqs = [settings.STATICFILES_DIRS[0]+"/algorithms/"+algorithm_to_executable[algorithm]]
+    algorithm_reqs = [settings.STATICFILES_DIRS[0]+"\\algorithms\\"+algorithm_to_executable[algorithm]]
     print("Adding algorithms.")
     if algorithm=="DeNovo":
-        processes.append([algorithm_reqs[0], os.path.join(base_dir, "spectrum_list_29.txt")])
+        processes.append([algorithm_reqs[0]])#, os.path.join(base_dir, "spectrum_list_29.txt")])
     else:
         processes.append([algorithm_reqs[0]])
 
 @shared_task(bind=True)
 def run_pipeline(self, process):
-    print(process)
+    print("Inside")
+    progress_recorder = ProgressRecorder(self)
+    for i in range(10):
+        sleep(10)
+        progress_recorder.set_progress(i+1, 10, f'On iteration {i}.')
+        print(i)
+    return "Done"
+    '''print(process)
     if len(process)==2:
         print("In the pipeline run...")
         run_denovo.run_denovo_func()
     return 'Done'
 
-'''class Processor(Task):
+class Processor(Task):
     instrument = ""
     spectrum_dict = dict()
     spectrum_list = []

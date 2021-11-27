@@ -28,7 +28,7 @@
 
     <title>Fibonacci - Integrated Biotech</title>
   </head>
-  <body>
+  <body onresize="{% if 'pipelines' in request.path and 'execute' in request.path %}resize_graph(){% endif %}" onload="{% if 'pipelines' in request.path and 'execute' in request.path %}load_pipeline_tree(true){% endif %}">
     <!-- Header section starts -->
     <header class="header">
         <a href="{% url 'home_page_view' %}" class="fibonacci">fibonacci</a>

@@ -18,7 +18,7 @@ from django.urls import path, include
 from pages.views import home_page_view, register_page_view, login_page_view, logout_page_view, search_results_view
 
 urlpatterns = [
-    path('home', home_page_view, name='home_page_view'),
+    path('', home_page_view, name='home_page_view'),
     path('register/', register_page_view, name='register_page_view'),
     path('login/', login_page_view, name='login_page_view'),
     path('logout/', logout_page_view, name='logout_page_view'),
@@ -26,5 +26,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pipelines/', include('pipelines.urls')),
     path('celery-progress/', include('celery_progress.urls')),
-    path('', include('mainapp.urls')),
+    #path('', include('mainapp.urls')),
 ]
